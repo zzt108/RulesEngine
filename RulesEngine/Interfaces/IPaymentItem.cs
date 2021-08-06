@@ -1,7 +1,8 @@
 ﻿namespace RulesEngine
 {
-    interface IPaymentItem
+    public interface IPaymentItem
     {
         IProduct Product { get; }
+        double Amount { get; }
     }
 }

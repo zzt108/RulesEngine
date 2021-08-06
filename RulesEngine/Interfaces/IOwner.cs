@@ -1,6 +1,6 @@
 ﻿namespace RulesEngine
 {
-    interface IOwner : IPerson
+    public interface IOwner : IPerson
     {
         string Email { get; }
     }

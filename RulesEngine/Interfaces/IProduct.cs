@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RulesEngine
 {
-    interface IProduct
+    public interface IProduct
     {
         string Name { get; }
         IOwner Owner { get; }

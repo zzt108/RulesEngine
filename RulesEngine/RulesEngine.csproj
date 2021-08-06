@@ -41,6 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Person\Agent.cs" />
+    <Compile Include="Person\Owner.cs" />
+    <Compile Include="Person\Person.cs" />
+    <Compile Include="Product\Book.cs" />
     <Compile Include="Interfaces\IAgent.cs" />
     <Compile Include="Interfaces\IBook.cs" />
     <Compile Include="Interfaces\IMembership.cs" />
@@ -54,7 +58,14 @@
     <Compile Include="Interfaces\IPerson.cs" />
     <Compile Include="Interfaces\IPhysicalProduct.cs" />
     <Compile Include="Interfaces\IProduct.cs" />
+    <Compile Include="Interfaces\IRule.cs" />
+    <Compile Include="Interfaces\IRules.cs" />
     <Compile Include="Interfaces\IVideo.cs" />
+    <Compile Include="Payment\Payment.cs" />
+    <Compile Include="Payment\PaymentItem.cs" />
+    <Compile Include="Product\Product.cs" />
+    <Compile Include="Product\Video.cs" />
+    <Compile Include="Rules.cs" />
     <Compile Include="RulesEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace RulesEngine
 {
-    interface IPayment
+    public interface IPayment
     {
-        IEnumerable<IPaymentItem> Products { get; }
+        IEnumerable<IPaymentItem> PaymentItems { get; }
+        DateTime Date { get; }
     }
 }

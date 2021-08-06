@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RulesEngine", "RulesEngine\RulesEngine.csproj", "{5175A941-42C5-42EF-99AC-1A2F2C29BA8D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{29973894-6D7F-4A3F-AEBA-98A083437ED8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5175A941-42C5-42EF-99AC-1A2F2C29BA8D} = {5175A941-42C5-42EF-99AC-1A2F2C29BA8D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

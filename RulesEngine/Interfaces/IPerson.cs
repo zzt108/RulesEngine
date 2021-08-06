@@ -1,6 +1,6 @@
 ﻿namespace RulesEngine
 {
-    interface IPerson
+    public interface IPerson
     {
         string Name { get; }
     }
