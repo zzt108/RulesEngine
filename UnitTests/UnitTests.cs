@@ -14,6 +14,7 @@ namespace UnitTests
         const string GeneratePackingSlip = "Generate Packing Slip";
         const string Shipping = "Shipping";
         const string ForRoyaltyDepartment = "For Royalty Department";
+        const string MembershipNotification = "Membership Notification";
         const string MembershipActivation = "Membership Activation";
         const string Activate = "Activate";
         const string MembershipUpgrade = "Membership Upgrade";
@@ -94,8 +95,17 @@ namespace UnitTests
             actionMembershipActivation.Verb.Returns(MembershipActivation);
             actionMembershipActivation.Arguments.Returns(new[] { Activate });
 
+            var actionMembershipNotification = Substitute.For<IAction>();
+            actionMembershipNotification.Verb.Returns(MembershipNotification);
+            var email = owner.Email;
+            actionMembershipNotification.Arguments.Returns(new[] { Activate, email });
+
             var actions = Substitute.For<IActions>();
-            actions.ActionCollection.Returns(new[] {actionMembershipActivation});
+            actions.ActionCollection.Returns(new[]
+                                                 {
+                                                     actionMembershipActivation, 
+                                                     actionMembershipNotification
+                                                 });
 
             var rule = Substitute.For<IRule>();
             rule.Execute().Returns(actions);
@@ -108,11 +118,14 @@ namespace UnitTests
 
             var result = rulesEngine.Execute(payment);
 
-            result.ActionCollection.Count().Should().Be(1);
+            result.ActionCollection.Count().Should().Be(2);
             result.ActionCollection.Should().ContainItemsAssignableTo<IAction>();
             var resultActions = result.ActionCollection.ToArray();
             resultActions[0].Verb.Should().Be(MembershipActivation);
             resultActions[0].Arguments.ToArray()[0].Should().Be(Activate);
+            resultActions[1].Verb.Should().Be(MembershipNotification);
+            resultActions[1].Arguments.ToArray()[0].Should().Be(Activate);
+            resultActions[1].Arguments.ToArray()[1].Should().Be(owner.Email);
         }
 
         [TestMethod]
@@ -138,8 +151,17 @@ namespace UnitTests
             actionMembershipUpgrade.Verb.Returns(MembershipUpgrade);
             actionMembershipUpgrade.Arguments.Returns(new[] { Upgrade });
 
+            var actionMembershipNotification = Substitute.For<IAction>();
+            actionMembershipNotification.Verb.Returns(MembershipNotification);
+            var email = owner.Email;
+            actionMembershipNotification.Arguments.Returns(new string[] { Upgrade, email });
+
             var actions = Substitute.For<IActions>();
-            actions.ActionCollection.Returns(new[] { actionMembershipUpgrade });
+            actions.ActionCollection.Returns(new[]
+                                                 {
+                                                     actionMembershipUpgrade,
+                                                     actionMembershipNotification
+                                                 });
 
             var rule = Substitute.For<IRule>();
             rule.Execute().Returns(actions);
@@ -152,11 +174,14 @@ namespace UnitTests
 
             var result = rulesEngine.Execute(payment);
 
-            result.ActionCollection.Count().Should().Be(1);
+            result.ActionCollection.Count().Should().Be(2);
             result.ActionCollection.Should().ContainItemsAssignableTo<IAction>();
             var resultActions = result.ActionCollection.ToArray();
             resultActions[0].Verb.Should().Be(MembershipUpgrade);
             resultActions[0].Arguments.ToArray()[0].Should().Be(Upgrade);
+            resultActions[1].Verb.Should().Be(MembershipNotification);
+            resultActions[1].Arguments.ToArray()[0].Should().Be(Upgrade);
+            resultActions[1].Arguments.ToArray()[1].Should().Be(owner.Email);
         }
     }
 
