@@ -10,6 +10,8 @@ namespace UnitTests
 {
     using System.Globalization;
 
+    using NSubstitute.ReturnsExtensions;
+
     [TestClass]
     public class UnitTests
     {
@@ -30,19 +32,31 @@ namespace UnitTests
             var actions = Substitute.For<IActions>();
             var actionPackingSlip = Substitute.For<IAction>();
             actionPackingSlip.Verb.Returns(GeneratePackingSlip);
-            actionPackingSlip.Arguments.Returns(new[] { Shipping });
+            var productName = product.Name;
+            actionPackingSlip.Arguments.Returns(new[] { Shipping, productName });
 
-            var actionCommission = Substitute.For<IAction>();
-            actionCommission.Verb.Returns(CommissionPayment);
-            var name = product.Agent.Name;
-            var commission = product.Agent.Commission.ToString(CultureInfo.InvariantCulture);
-            actionCommission.Arguments.Returns(new[] { name, commission });
+            if (product.Agent != null)
+            {
+                var actionCommission = Substitute.For<IAction>();
+                actionCommission.Verb.Returns(CommissionPayment);
+                var name = product.Agent.Name;
+                var commission = product.Agent.Commission.ToString(CultureInfo.InvariantCulture);
+                actionCommission.Arguments.Returns(new[] { name, commission });
 
-            actions.ActionCollection.Returns(new[]
-                                                 {
-                                                     actionPackingSlip,
-                                                     actionCommission
-                                                 });
+                actions.ActionCollection.Returns(new[]
+                                                     {
+                                                         actionPackingSlip,
+                                                         actionCommission
+                                                     });
+            }
+            else
+            {
+                actions.ActionCollection.Returns(new[]
+                                                     {
+                                                         actionPackingSlip,
+                                                     });
+
+            }
 
 
             if (product is IBook)
@@ -157,6 +171,65 @@ namespace UnitTests
             resultActions[1].Verb.Should().Be(CommissionPayment);
             resultActions[1].Arguments.ToArray()[0].Should().Be(agent.Name);
             resultActions[1].Arguments.ToArray()[1].Should().Be(agent.Commission.ToString(CultureInfo.InvariantCulture));
+        }
+
+        [TestMethod]
+        public void TestLearningToSkiRules()
+        {
+            var owner = Substitute.For<IOwner>();
+            owner.Name.Returns("John Doe");
+            owner.Email.Returns("jd@mail.com");
+
+            var agent = Substitute.For<IAgent>();
+            agent.Name.Returns("James Bond");
+            agent.Commission.Returns(0.1);
+
+            var videoLTS = Substitute.For<IVideo>();
+            videoLTS.Owner.Returns(owner);
+            videoLTS.Agent.Returns(agent);
+            videoLTS.Name.Returns(LearningToSki);
+
+            var videoFA = Substitute.For<IVideo>();
+            videoFA.Owner.Returns(owner);
+            videoFA.Agent.ReturnsNull();
+            videoFA.Name.Returns(FirstAid);
+
+            var paymentItem = Substitute.For<IPaymentItem>();
+            paymentItem.Product.Returns(videoLTS);
+            paymentItem.Amount.Returns(1.01);
+
+            var payment = Substitute.For<IPayment>();
+            payment.Date.Returns(DateTime.Now);
+            payment.PaymentItems.Returns(new[] { paymentItem });
+
+            var actions = Actions(videoLTS);
+            var actions2 = Actions(videoFA);
+            var actionCollection = actions.ActionCollection.ToList();
+            actionCollection.AddRange(actions2.ActionCollection);
+            actions.ActionCollection.Returns(actionCollection);
+
+            var rule = Substitute.For<IRule>();
+            rule.Execute().Returns(actions);
+
+            var rules = Substitute.For<IRules>();
+            rules.RulesCollection.Returns(new[] { rule });
+
+            var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
+            rulesEngine.Execute(payment).Returns(actions);
+
+            var result = rulesEngine.Execute(payment);
+            // Actual tests
+            result.ActionCollection.Count().Should().Be(3);
+            result.ActionCollection.Should().ContainItemsAssignableTo<IAction>();
+            var resultActions = result.ActionCollection.ToArray();
+
+            resultActions[0].Verb.Should().Be(GeneratePackingSlip);
+            resultActions[0].Arguments.ToArray()[0].Should().Be(Shipping);
+            resultActions[1].Verb.Should().Be(CommissionPayment);
+            resultActions[1].Arguments.ToArray()[0].Should().Be(agent.Name);
+            resultActions[1].Arguments.ToArray()[1].Should().Be(agent.Commission.ToString(CultureInfo.InvariantCulture));
+            resultActions[2].Verb.Should().Be(GeneratePackingSlip);
+            resultActions[2].Arguments.ToArray()[0].Should().Be(Shipping);
         }
 
         [TestMethod]
