@@ -1,6 +1,6 @@
 ﻿namespace RulesEngine
 {
-    interface IMembershipUpgrade : IMembershipProduct
+    public interface IMembershipUpgrade : IMembershipProduct
     {
         void Upgrade();
     }

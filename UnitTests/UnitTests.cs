@@ -16,6 +16,8 @@ namespace UnitTests
         const string ForRoyaltyDepartment = "For Royalty Department";
         const string MembershipActivation = "Membership Activation";
         const string Activate = "Activate";
+        const string MembershipUpgrade = "Membership Upgrade";
+        const string Upgrade = "Upgrade";
 
         [TestMethod]
         public void TestBookRules()
@@ -78,7 +80,7 @@ namespace UnitTests
 
             var membershipActivation = Substitute.For<IMembershipActivation>();
             membershipActivation.Owner.Returns(owner);
-            membershipActivation.Name.Returns("Membership activation");
+            membershipActivation.Name.Returns(MembershipActivation);
 
             var paymentItem = Substitute.For<IPaymentItem>();
             paymentItem.Product.Returns(membershipActivation);
@@ -111,6 +113,50 @@ namespace UnitTests
             var resultActions = result.ActionCollection.ToArray();
             resultActions[0].Verb.Should().Be(MembershipActivation);
             resultActions[0].Arguments.ToArray()[0].Should().Be(Activate);
+        }
+
+        [TestMethod]
+        public void TestMembershipUpgrade()
+        {
+            var owner = Substitute.For<IOwner>();
+            owner.Name.Returns("John Doe");
+            owner.Email.Returns("jd@mail.com");
+
+            var membershipUpgrade = Substitute.For<IMembershipUpgrade>();
+            membershipUpgrade.Owner.Returns(owner);
+            membershipUpgrade.Name.Returns(MembershipUpgrade);
+
+            var paymentItem = Substitute.For<IPaymentItem>();
+            paymentItem.Product.Returns(membershipUpgrade);
+            paymentItem.Amount.Returns(0.01);
+
+            var payment = Substitute.For<IPayment>();
+            payment.Date.Returns(DateTime.Now);
+            payment.PaymentItems.Returns(new[] { paymentItem });
+
+            var actionMembershipUpgrade = Substitute.For<IAction>();
+            actionMembershipUpgrade.Verb.Returns(MembershipUpgrade);
+            actionMembershipUpgrade.Arguments.Returns(new[] { Upgrade });
+
+            var actions = Substitute.For<IActions>();
+            actions.ActionCollection.Returns(new[] { actionMembershipUpgrade });
+
+            var rule = Substitute.For<IRule>();
+            rule.Execute().Returns(actions);
+
+            var rules = Substitute.For<IRules>();
+            rules.RulesCollection.Returns(new[] {rule});
+
+            var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
+            rulesEngine.Execute(payment).Returns(actions);
+
+            var result = rulesEngine.Execute(payment);
+
+            result.ActionCollection.Count().Should().Be(1);
+            result.ActionCollection.Should().ContainItemsAssignableTo<IAction>();
+            var resultActions = result.ActionCollection.ToArray();
+            resultActions[0].Verb.Should().Be(MembershipUpgrade);
+            resultActions[0].Arguments.ToArray()[0].Should().Be(Upgrade);
         }
     }
 
