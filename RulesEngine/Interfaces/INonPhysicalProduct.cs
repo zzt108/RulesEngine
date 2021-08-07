@@ -1,6 +1,6 @@
 ﻿namespace RulesEngine
 {
-    interface INonPhysicalProduct : IProduct
+    public interface INonPhysicalProduct : IProduct
     {
         
     }

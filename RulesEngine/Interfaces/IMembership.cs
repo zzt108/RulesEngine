@@ -1,6 +1,6 @@
 ﻿namespace RulesEngine
 {
-    interface IMembership
+    public interface IMembership
     {
         IOwner Owner { get; }
     }

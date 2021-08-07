@@ -1,7 +1,7 @@
 ﻿namespace RulesEngine
 {
-    interface IMembershipProduct:INonPhysicalProduct
+    public interface IMembershipProduct : INonPhysicalProduct
     {
-        void NotifyOwner();
+        IAction NotifyOwner();
     }
 }

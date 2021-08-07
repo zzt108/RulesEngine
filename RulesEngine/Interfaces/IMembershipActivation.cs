@@ -1,6 +1,6 @@
 ﻿namespace RulesEngine
 {
-    interface IMembershipActivation : IMembershipProduct
+    public interface IMembershipActivation : IMembershipProduct
     {
         IMembership Activate();
     }
