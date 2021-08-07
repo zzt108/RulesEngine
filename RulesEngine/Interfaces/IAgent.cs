@@ -1,6 +1,6 @@
 ﻿namespace RulesEngine
 {
-    interface IAgent : IPerson
+    public interface IAgent : IPerson
     {
         double Commission { get; }
     }

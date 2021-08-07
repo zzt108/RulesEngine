@@ -4,13 +4,11 @@ namespace RulesEngine
 {
     public class Video : Product, IVideo
     {
-        public string PackingListItem()
+        public Video(string name, IOwner owner, IAgent agent) : base(name, owner)
         {
-            throw new NotImplementedException();
+            this.Agent = agent;
         }
 
-        public Video(string name, IOwner owner) : base(name, owner)
-        {
-        }
+        public IAgent Agent { get; }
     }
 }

@@ -4,13 +4,11 @@ namespace RulesEngine
 {
     public class Book : Product, IBook
     {
-        public Book(string name, IOwner owner) : base(name, owner)
+        public Book(string name, IOwner owner, IAgent agent) : base(name, owner)
         {
+            this.Agent = agent;
         }
 
-        public string PackingListItem()
-        {
-            throw new NotImplementedException();
-        }
+        public IAgent Agent { get; }
     }
 }

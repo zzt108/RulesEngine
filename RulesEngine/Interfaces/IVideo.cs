@@ -1,6 +1,6 @@
 ﻿namespace RulesEngine
 {
-    interface IVideo : IPhysicalProduct
+    public interface IVideo : IPhysicalProduct
     {
         
     }

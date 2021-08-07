@@ -2,6 +2,6 @@
 {
     public interface IPhysicalProduct :IProduct
     {
-        string PackingListItem();
+        IAgent Agent { get; }
     }
 }
