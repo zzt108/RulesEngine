@@ -1,6 +1,6 @@
 ﻿namespace RulesEngine
 {
-    interface IBook : IPhysicalProduct
+    public interface IBook : IPhysicalProduct
     {
         
     }

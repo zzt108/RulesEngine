@@ -8,17 +8,10 @@ namespace RulesEngine
     public class RulesEngine
     {
         private IRules _rules;
-        public RulesEngine()
-        {
-            _rules = GetRules();
-        }
 
-        private IRules GetRules()
-        {
-            return new Rules();
-        }
+        public RulesEngine(IRules rules) => _rules = rules;
 
-        public void Execute(IPayment payment)
+        public virtual IActions Execute(IPayment payment)
         {
             throw new NotImplementedException();
         }

@@ -2,7 +2,7 @@
 
 namespace RulesEngine
 {
-    interface IRules
+    public interface IRules
     {
         IEnumerable<IRule> RulesCollection { get; }
     }

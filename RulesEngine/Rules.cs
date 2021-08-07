@@ -4,10 +4,9 @@ namespace RulesEngine
 {
     public class Rules : IRules
     {
-        private IEnumerable<IRule> _rules;
-        public Rules()
+        public Rules(IEnumerable<IRule> rulesCollection)
         {
-            _rules = new List<IRule>(); 
+            RulesCollection = rulesCollection;
         }
 
         public IEnumerable<IRule> RulesCollection { get; }

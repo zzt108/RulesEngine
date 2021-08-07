@@ -1,6 +1,6 @@
 ﻿namespace RulesEngine
 {
-    interface IPhysicalProduct :IProduct
+    public interface IPhysicalProduct :IProduct
     {
         string PackingListItem();
     }
