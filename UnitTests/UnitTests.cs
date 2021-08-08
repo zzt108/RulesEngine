@@ -100,11 +100,7 @@ namespace UnitTests
 
             var actions = Actions(physicalProduct);
 
-            var rule = Substitute.For<IRule>();
-            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
-
             var rules = Substitute.For<IRules>();
-            rules.RulesCollection.Returns(new[] { rule });
             rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
 
             //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
@@ -153,11 +149,8 @@ namespace UnitTests
 
             var actions = Actions(book);
 
-            var rule = Substitute.For<IRule>();
-            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
-
             var rules = Substitute.For<IRules>();
-            rules.RulesCollection.Returns(new[] { rule });
+            rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
 
             var rulesEngine = Substitute.For<RulesEngine>(rules);
             rulesEngine.Execute(payment).Returns(actions);
@@ -206,11 +199,8 @@ namespace UnitTests
 
             var actions = Actions(video);
 
-            var rule = Substitute.For<IRule>();
-            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
-
             var rules = Substitute.For<IRules>();
-            rules.RulesCollection.Returns(new[] { rule });
+            rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
 
             var rulesEngine = Substitute.For<RulesEngine>(rules);
             rulesEngine.Execute(payment).Returns(actions);
@@ -263,11 +253,8 @@ namespace UnitTests
             actionCollection.AddRange(actions2.ActionCollection);
             actions.ActionCollection.Returns(actionCollection);
 
-            var rule = Substitute.For<IRule>();
-            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
-
             var rules = Substitute.For<IRules>();
-            rules.RulesCollection.Returns(new[] { rule });
+            rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
 
             var rulesEngine = Substitute.For<RulesEngine>(rules);
             rulesEngine.Execute(payment).Returns(actions);
@@ -322,11 +309,8 @@ namespace UnitTests
                                                      actionMembershipNotification
                                                  });
 
-            var rule = Substitute.For<IRule>();
-            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
-
             var rules = Substitute.For<IRules>();
-            rules.RulesCollection.Returns(new[] { rule });
+            rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
 
             var rulesEngine = Substitute.For<RulesEngine>(rules);
             rulesEngine.Execute(payment).Returns(actions);
@@ -378,11 +362,8 @@ namespace UnitTests
                                                      actionMembershipNotification
                                                  });
 
-            var rule = Substitute.For<IRule>();
-            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
-
             var rules = Substitute.For<IRules>();
-            rules.RulesCollection.Returns(new[] { rule });
+            rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
 
             var rulesEngine = Substitute.For<RulesEngine>(rules);
             rulesEngine.Execute(payment).Returns(actions);

@@ -6,17 +6,13 @@ namespace RulesEngine
 
     public class Rules : IRules
     {
-        public Rules(IEnumerable<IRule> rulesCollection)
-        {
-            RulesCollection = rulesCollection;
-        }
 
-        public IEnumerable<IRule> RulesCollection { get; }
+        private IEnumerable<IRule> RuleCollection { get; }
 
         public virtual IActions ExecuteAll(IPaymentItem paymentItem)
         {
             var actionCollection = new List<IAction>();
-            foreach (var rule in this.RulesCollection)
+            foreach (var rule in this.RuleCollection)
             {
                 var actions = rule.Execute(paymentItem);
                 actionCollection.AddRange(actions.ActionCollection);
