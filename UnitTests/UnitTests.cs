@@ -105,7 +105,7 @@ namespace UnitTests
 
             //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
             //rulesEngine.Execute(payment).Returns(actions);
-            
+            //using actual implementation of RulesEngine
             var rulesEngine = new RulesEngine(rules);
             var result = rulesEngine.Execute(payment);
 
@@ -152,9 +152,10 @@ namespace UnitTests
             var rules = Substitute.For<IRules>();
             rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
 
-            var rulesEngine = Substitute.For<RulesEngine>(rules);
-            rulesEngine.Execute(payment).Returns(actions);
-
+            //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
+            //rulesEngine.Execute(payment).Returns(actions);
+            //using actual implementation of RulesEngine
+            var rulesEngine = new RulesEngine(rules);
             var result = rulesEngine.Execute(payment);
 
             /*
@@ -202,10 +203,12 @@ namespace UnitTests
             var rules = Substitute.For<IRules>();
             rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
 
-            var rulesEngine = Substitute.For<RulesEngine>(rules);
-            rulesEngine.Execute(payment).Returns(actions);
-
+            //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
+            //rulesEngine.Execute(payment).Returns(actions);
+            //using actual implementation of RulesEngine
+            var rulesEngine = new RulesEngine(rules);
             var result = rulesEngine.Execute(payment);
+
             // Actual tests
             result.ActionCollection.Count().Should().Be(2);
             result.ActionCollection.Should().ContainItemsAssignableTo<IAction>();
@@ -256,10 +259,12 @@ namespace UnitTests
             var rules = Substitute.For<IRules>();
             rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
 
-            var rulesEngine = Substitute.For<RulesEngine>(rules);
-            rulesEngine.Execute(payment).Returns(actions);
-
+            //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
+            //rulesEngine.Execute(payment).Returns(actions);
+            //using actual implementation of RulesEngine
+            var rulesEngine = new RulesEngine(rules);
             var result = rulesEngine.Execute(payment);
+
             // Actual tests
             result.ActionCollection.Count().Should().Be(3);
             result.ActionCollection.Should().ContainItemsAssignableTo<IAction>();
@@ -312,10 +317,12 @@ namespace UnitTests
             var rules = Substitute.For<IRules>();
             rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
 
-            var rulesEngine = Substitute.For<RulesEngine>(rules);
-            rulesEngine.Execute(payment).Returns(actions);
-
+            //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
+            //rulesEngine.Execute(payment).Returns(actions);
+            //using actual implementation of RulesEngine
+            var rulesEngine = new RulesEngine(rules);
             var result = rulesEngine.Execute(payment);
+
             // Actual tests
             result.ActionCollection.Count().Should().Be(2);
             result.ActionCollection.Should().ContainItemsAssignableTo<IAction>();
@@ -365,10 +372,12 @@ namespace UnitTests
             var rules = Substitute.For<IRules>();
             rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
 
-            var rulesEngine = Substitute.For<RulesEngine>(rules);
-            rulesEngine.Execute(payment).Returns(actions);
-
+            //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
+            //rulesEngine.Execute(payment).Returns(actions);
+            //using actual implementation of RulesEngine
+            var rulesEngine = new RulesEngine(rules);
             var result = rulesEngine.Execute(payment);
+
 
             // Actual tests
             result.ActionCollection.Count().Should().Be(2);
@@ -380,7 +389,5 @@ namespace UnitTests
             resultActions[1].Arguments.ToArray()[0].Should().Be(Upgrade);
             resultActions[1].Arguments.ToArray()[1].Should().Be(owner.Email);
         }
-
     }
-
 }
