@@ -1,6 +1,6 @@
 ﻿namespace RulesEngine
 {
-    interface IRule
+    public interface IRule
     {
         IActions Execute(IPaymentItem item);
     }

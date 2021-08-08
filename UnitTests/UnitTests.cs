@@ -369,8 +369,11 @@ namespace UnitTests
                                                      actionMembershipNotification
                                                  });
 
-            var rules = Substitute.For<IRules>();
-            rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
+            //var rules = Substitute.For<IRules>();
+            //rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
+            var rule = Substitute.For<IRule>();
+            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
+            var rules = new Rules(new IRule[] { rule });
 
             //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
             //rulesEngine.Execute(payment).Returns(actions);
