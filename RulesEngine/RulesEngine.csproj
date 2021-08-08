@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions.cs" />
+    <Compile Include="Interfaces\IAction.cs" />
+    <Compile Include="Interfaces\IActions.cs" />
     <Compile Include="Person\Agent.cs" />
     <Compile Include="Person\Owner.cs" />
     <Compile Include="Person\Person.cs" />
