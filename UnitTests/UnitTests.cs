@@ -71,6 +71,57 @@ namespace UnitTests
             return actions;
         }
 
+        
+        [TestMethod]
+        public void TestPhysicalProductRules()
+        {
+            var owner = Substitute.For<IOwner>();
+            owner.Name.Returns("John Doe");
+            owner.Email.Returns("jd@mail.com");
+
+            var agent = Substitute.For<IAgent>();
+            agent.Name.Returns("James Bond");
+            agent.Commission.Returns(0.1);
+
+            var physicalProduct = Substitute.For<IPhysicalProduct>();
+            physicalProduct.Owner.Returns(owner);
+            physicalProduct.Agent.Returns(agent);
+            physicalProduct.Name.Returns("Screw driver");
+
+            var paymentItem = Substitute.For<IPaymentItem>();
+            paymentItem.Product.Returns(physicalProduct);
+            paymentItem.Amount.Returns(1.01);
+
+            var payment = Substitute.For<IPayment>();
+            payment.Date.Returns(DateTime.Now);
+            payment.PaymentItems.Returns(new[] { paymentItem });
+
+            var actions = Actions(physicalProduct);
+
+            var rule = Substitute.For<IRule>();
+            rule.Execute().Returns(actions);
+
+            var rules = Substitute.For<IRules>();
+            rules.RulesCollection.Returns(new[] { rule });
+
+            var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
+            rulesEngine.Execute(payment).Returns(actions);
+
+            var result = rulesEngine.Execute(payment);
+
+            /*
+             * Actual tests
+             */
+            result.ActionCollection.Count().Should().Be(2);
+            result.ActionCollection.Should().ContainItemsAssignableTo<IAction>();
+            var resultActions = result.ActionCollection.ToArray();
+
+            resultActions[0].Verb.Should().Be(GeneratePackingSlip);
+            resultActions[0].Arguments.ToArray()[0].Should().Be(Shipping);
+            resultActions[1].Verb.Should().Be(CommissionPayment);
+            resultActions[1].Arguments.ToArray()[0].Should().Be(agent.Name);
+            resultActions[1].Arguments.ToArray()[1].Should().Be(agent.Commission.ToString(CultureInfo.InvariantCulture));
+        }
 
         [TestMethod]
         public void TestBookRules()
