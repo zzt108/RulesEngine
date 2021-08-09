@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace RulesEngine
 {
-    using System.Linq;
-
     public class Rules : IRules
     {
         public Rules(IEnumerable<IRule> rulesCollection)
@@ -19,7 +18,10 @@ namespace RulesEngine
             foreach (var rule in this.RulesCollection)
             {
                 var actions = rule.Execute(paymentItem);
-                actionCollection.AddRange(actions.ActionCollection);
+                if (actions != null)
+                {
+                    actionCollection.AddRange(actions.ActionCollection);
+                }
             } 
             return new Actions(actionCollection);
         }

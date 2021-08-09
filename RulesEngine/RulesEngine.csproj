@@ -41,7 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions.cs" />
+    <Compile Include="Actions\ActionItem.cs" />
+    <Compile Include="Actions\Actions.cs" />
     <Compile Include="Interfaces\IAction.cs" />
     <Compile Include="Interfaces\IActions.cs" />
     <Compile Include="Person\Agent.cs" />
@@ -68,7 +69,14 @@
     <Compile Include="Payment\PaymentItem.cs" />
     <Compile Include="Product\Product.cs" />
     <Compile Include="Product\Video.cs" />
-    <Compile Include="Rules.cs" />
+    <Compile Include="Actions\ActionConstants.cs" />
+    <Compile Include="Rules\RuleBook.cs" />
+    <Compile Include="Rules\RuleMembershipActivation.cs" />
+    <Compile Include="Rules\RuleMembershipNotificatio.cs" />
+    <Compile Include="Rules\RuleMembershipUpgrade.cs" />
+    <Compile Include="Rules\RulePhysicalProduct.cs" />
+    <Compile Include="Rules\RulePhysicalProductAgentCommission.cs" />
+    <Compile Include="Rules\Rules.cs" />
     <Compile Include="RulesEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
