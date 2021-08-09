@@ -100,14 +100,12 @@ namespace UnitTests
 
             var actions = Actions(physicalProduct);
 
-            //var rules = Substitute.For<IRules>();
-            //rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
             var rule = Substitute.For<IRule>();
             rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
+
+            // Actual Implementation
             var rules = new Rules(new IRule[] { rule });
 
-            //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
-            //rulesEngine.Execute(payment).Returns(actions);
             //using actual implementation of RulesEngine
             var rulesEngine = new RulesEngine(rules);
             var result = rulesEngine.Execute(payment);
@@ -152,11 +150,12 @@ namespace UnitTests
 
             var actions = Actions(book);
 
-            var rules = Substitute.For<IRules>();
-            rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
+            var rule = Substitute.For<IRule>();
+            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
 
-            //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
-            //rulesEngine.Execute(payment).Returns(actions);
+            // Actual Implementation
+            var rules = new Rules(new IRule[] { rule });
+
             //using actual implementation of RulesEngine
             var rulesEngine = new RulesEngine(rules);
             var result = rulesEngine.Execute(payment);
@@ -203,15 +202,13 @@ namespace UnitTests
 
             var actions = Actions(video);
 
-            //var rules = Substitute.For<IRules>();
-            //rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
             var rule = Substitute.For<IRule>();
             rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
+
+            // Actual implementation
             var rules = new Rules(new IRule[] { rule });
 
-            //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
-            //rulesEngine.Execute(payment).Returns(actions);
-            //using actual implementation of RulesEngine
+            // using actual implementation of RulesEngine
             var rulesEngine = new RulesEngine(rules);
             var result = rulesEngine.Execute(payment);
 
@@ -262,10 +259,10 @@ namespace UnitTests
             actionCollection.AddRange(actions2.ActionCollection);
             actions.ActionCollection.Returns(actionCollection);
 
-            //var rules = Substitute.For<IRules>();
-            //rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
             var rule = Substitute.For<IRule>();
             rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
+
+            // Actual implementation
             var rules = new Rules(new IRule[] { rule });
 
             //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
@@ -323,15 +320,13 @@ namespace UnitTests
                                                      actionMembershipNotification
                                                  });
 
-            //var rules = Substitute.For<IRules>();
-            //rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
             var rule = Substitute.For<IRule>();
             rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
+
+            // Actual implementation
             var rules = new Rules(new IRule[] { rule });
 
 
-            //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
-            //rulesEngine.Execute(payment).Returns(actions);
             //using actual implementation of RulesEngine
             var rulesEngine = new RulesEngine(rules);
             var result = rulesEngine.Execute(payment);
@@ -382,18 +377,15 @@ namespace UnitTests
                                                      actionMembershipNotification
                                                  });
 
-            //var rules = Substitute.For<IRules>();
-            //rules.ExecuteAll(Arg.Any<IPaymentItem>()).Returns(actions);
             var rule = Substitute.For<IRule>();
             rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
+
+            // Actual implementation
             var rules = new Rules(new IRule[] { rule });
 
-            //var rulesEngine = Substitute.For<RulesEngine.RulesEngine>(rules);
-            //rulesEngine.Execute(payment).Returns(actions);
             //using actual implementation of RulesEngine
             var rulesEngine = new RulesEngine(rules);
             var result = rulesEngine.Execute(payment);
-
 
             // Actual tests
             result.ActionCollection.Count().Should().Be(2);
