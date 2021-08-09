@@ -5,63 +5,31 @@ using System.Linq;
 using FluentAssertions;
 using NSubstitute;
 using RulesEngine;
+using System.Globalization;
+using NSubstitute.ReturnsExtensions;
 
 namespace UnitTests
 {
-    using System.Globalization;
-
-    using NSubstitute.ReturnsExtensions;
-
     using RulesEngine = RulesEngine.RulesEngine;
 
     [TestClass]
     public class UnitTests
     {
-        private static IActions Actions(IPhysicalProduct product)
+
+        private IEnumerable<IRule> getAllRules()
         {
-            var actions = Substitute.For<IActions>();
-            var actionPackingSlip = Substitute.For<IAction>();
-            actionPackingSlip.Verb.Returns(ActionConstants.GeneratePackingSlip);
-            var productName = product.Name;
-            actionPackingSlip.Arguments.Returns(new[] { ActionConstants.Shipping, productName });
-
-            if (product.Agent != null)
-            {
-                var actionCommission = Substitute.For<IAction>();
-                actionCommission.Verb.Returns(ActionConstants.CommissionPayment);
-                var name = product.Agent.Name;
-                var commission = product.Agent.Commission.ToString(CultureInfo.InvariantCulture);
-                actionCommission.Arguments.Returns(new[] { name, commission });
-
-                actions.ActionCollection.Returns(new[]
-                                                     {
-                                                         actionPackingSlip,
-                                                         actionCommission
-                                                     });
-            }
-            else
-            {
-                actions.ActionCollection.Returns(new[]
-                                                     {
-                                                         actionPackingSlip,
-                                                     });
-
-            }
-
-
-            if (product is IBook)
-            {
-                var actionPackingSlipForBook = Substitute.For<IAction>();
-                actionPackingSlipForBook.Verb.Returns(ActionConstants.GeneratePackingSlip);
-                actionPackingSlipForBook.Arguments.Returns(new[] { ActionConstants.ForRoyaltyDepartment });
-                var newActions = actions.ActionCollection.ToList();
-                newActions.Add(actionPackingSlipForBook);
-                actions.ActionCollection.Returns(newActions);
-            }
-            return actions;
+            return new IRule[]
+                       {
+                           new RulePhysicalProduct(),
+                           new RulePhysicalProductAgentCommission(),
+                           new RuleBook(),
+                           new RuleMembershipActivation(),
+                           new RuleMembershipUpgrade(),
+                           new RuleMembershipNotificatio(),
+                           new RuleVideoLearningToSki(),
+                       };
         }
 
-        
         [TestMethod]
         public void TestPhysicalProductRules()
         {
@@ -86,13 +54,9 @@ namespace UnitTests
             payment.Date.Returns(DateTime.Now);
             payment.PaymentItems.Returns(new[] { paymentItem });
 
-            var actions = Actions(physicalProduct);
-
-            var rule = Substitute.For<IRule>();
-            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
 
             // Actual Implementation
-            var rules = new Rules(new IRule[] { rule });
+            var rules = new Rules(this.getAllRules());
 
             //using actual implementation of RulesEngine
             var rulesEngine = new RulesEngine(rules);
@@ -136,13 +100,8 @@ namespace UnitTests
             payment.Date.Returns(DateTime.Now);
             payment.PaymentItems.Returns(new[] { paymentItem });
 
-            var actions = Actions(book);
-
-            var rule = Substitute.For<IRule>();
-            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
-
             // Actual Implementation
-            var rules = new Rules(new IRule[] { rule });
+            var rules = new Rules(this.getAllRules());
 
             //using actual implementation of RulesEngine
             var rulesEngine = new RulesEngine(rules);
@@ -188,13 +147,8 @@ namespace UnitTests
             payment.Date.Returns(DateTime.Now);
             payment.PaymentItems.Returns(new[] { paymentItem });
 
-            var actions = Actions(video);
-
-            var rule = Substitute.For<IRule>();
-            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
-
             // Actual implementation
-            var rules = new Rules(new IRule[] { rule });
+            var rules = new Rules(this.getAllRules());
 
             // using actual implementation of RulesEngine
             var rulesEngine = new RulesEngine(rules);
@@ -241,17 +195,8 @@ namespace UnitTests
             payment.Date.Returns(DateTime.Now);
             payment.PaymentItems.Returns(new[] { paymentItem });
 
-            var actions = Actions(videoLTS);
-            var actions2 = Actions(videoFA);
-            var actionCollection = actions.ActionCollection.ToList();
-            actionCollection.AddRange(actions2.ActionCollection);
-            actions.ActionCollection.Returns(actionCollection);
-
-            var rule = Substitute.For<IRule>();
-            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
-
             // Actual implementation
-            var rules = new Rules(new IRule[] { rule });
+            var rules = new Rules(this.getAllRules());
 
             //using actual implementation of RulesEngine
             var rulesEngine = new RulesEngine(rules);
@@ -290,27 +235,8 @@ namespace UnitTests
             payment.Date.Returns(DateTime.Now);
             payment.PaymentItems.Returns(new[] { paymentItem });
 
-            var actionMembershipActivation = Substitute.For<IAction>();
-            actionMembershipActivation.Verb.Returns(ActionConstants.MembershipActivation);
-            actionMembershipActivation.Arguments.Returns(new[] { ActionConstants.Activate });
-
-            var actionMembershipNotification = Substitute.For<IAction>();
-            actionMembershipNotification.Verb.Returns(ActionConstants.MembershipNotification);
-            var email = owner.Email;
-            actionMembershipNotification.Arguments.Returns(new[] { ActionConstants.Activate, email });
-
-            var actions = Substitute.For<IActions>();
-            actions.ActionCollection.Returns(new[]
-                                                 {
-                                                     actionMembershipActivation,
-                                                     actionMembershipNotification
-                                                 });
-
-            var rule = Substitute.For<IRule>();
-            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
-
             // Actual implementation
-            var rules = new Rules(new IRule[] { rule });
+            var rules = new Rules(this.getAllRules());
 
 
             //using actual implementation of RulesEngine
@@ -347,27 +273,8 @@ namespace UnitTests
             payment.Date.Returns(DateTime.Now);
             payment.PaymentItems.Returns(new[] { paymentItem });
 
-            var actionMembershipUpgrade = Substitute.For<IAction>();
-            actionMembershipUpgrade.Verb.Returns(ActionConstants.MembershipUpgrade);
-            actionMembershipUpgrade.Arguments.Returns(new[] { ActionConstants.Upgrade });
-
-            var actionMembershipNotification = Substitute.For<IAction>();
-            actionMembershipNotification.Verb.Returns(ActionConstants.MembershipNotification);
-            var email = owner.Email;
-            actionMembershipNotification.Arguments.Returns(new string[] { ActionConstants.Upgrade, email });
-
-            var actions = Substitute.For<IActions>();
-            actions.ActionCollection.Returns(new[]
-                                                 {
-                                                     actionMembershipUpgrade,
-                                                     actionMembershipNotification
-                                                 });
-
-            var rule = Substitute.For<IRule>();
-            rule.Execute(Arg.Any<IPaymentItem>()).Returns(actions);
-
             // Actual implementation
-            var rules = new Rules(new IRule[] { rule });
+            var rules = new Rules(this.getAllRules());
 
             //using actual implementation of RulesEngine
             var rulesEngine = new RulesEngine(rules);

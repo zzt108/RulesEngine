@@ -9,7 +9,16 @@
         {
             if (item.Product is IMembershipProduct)
             {
-                var actionItem = new ActionItem(ActionConstants.MembershipNotification, new[] { ActionConstants.MembershipNotification, item.Product.Name, item.Product.Owner.Name });
+                string verb = string.Empty;
+                if (item.Product is IMembershipActivation)
+                {
+                    verb = ActionConstants.Activate;
+                }
+                if (item.Product is IMembershipUpgrade)
+                {
+                    verb = ActionConstants.Upgrade;
+                }
+                var actionItem = new ActionItem(ActionConstants.MembershipNotification, new[] { verb, item.Product.Owner.Email });
                 return new Actions(new IAction[] {actionItem});
             }
             else return null;
